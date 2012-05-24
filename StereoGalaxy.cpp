@@ -49,7 +49,7 @@ int main()
 {
     srand((unsigned int)(time(NULL)));
 
-    sf::Window App(sf::VideoMode(INITIAL_W, INITIAL_H, 32), "Stereo");
+    sf::Window app(sf::VideoMode(INITIAL_W, INITIAL_H, 32), "Stereo");
 
     // These introduce choppiness into the animation, so leave them out for now.
     //// App.SetFramerateLimit(64);
@@ -63,32 +63,32 @@ int main()
     glLineWidth(WIREFRAME_LINE_WIDTH);
     glPointSize(POINT_PARTICLE_SIZE);
 
-    renderLoop(App);
+    renderLoop(app);
 
     return EXIT_SUCCESS;
 }
 
-static void renderLoop(sf::Window & App)
+static void renderLoop(sf::Window & app)
 {
     static int w = INITIAL_W;
     static int h = INITIAL_H;
     static int printed = 0;
 
-    sf::Event Event;
-    sf::Clock Clock;
+    sf::Event event;
+    sf::Clock clock;
 
-    while (App.IsOpen())
+    while (app.isOpen())
     {
-        while (App.PollEvent(Event))
+        while (app.pollEvent(event))
         {
-            if((Event.Type == sf::Event::Closed) ||
-               (Event.Type == sf::Event::KeyPressed))
-                App.Close();
+            if((event.type == sf::Event::Closed) /*||
+               (event.type == sf::Event::KeyPressed)*/)
+                app.close();
 
-            if (Event.Type == sf::Event::Resized)
+            if (event.type == sf::Event::Resized)
             {
-                w = Event.Size.Width;
-                h = Event.Size.Height;
+                w = event.size.width;
+                h = event.size.height;
                 printed = 0;
             }
         }
@@ -98,7 +98,7 @@ static void renderLoop(sf::Window & App)
         const float nearDist             = 1.0f;
         const float farDist              = nearDist * 64;
         const float focalDist            = 2.0f;
-        const float ocularSeparation     = focalDist / 12.0;
+        const float ocularSeparation     = focalDist / 12.0f;
         const float fovDegX              = 25.0f;
 
         // Symmetric frustum properties:
@@ -113,10 +113,10 @@ static void renderLoop(sf::Window & App)
         const float rightEyeFrustumRight = +frustumHalfWidth - frustumOffset;
 
         // Animation:
-        const float rotationAmtDeg   = Clock.GetElapsedTime().AsSeconds() * ROTATION_DEG_PER_SEC;
+        const float rotationAmtDeg   = clock.getElapsedTime().asSeconds() * ROTATION_DEG_PER_SEC;
         const float objectDist       = nearDist + 0.5f;
         const float objectElevation  = 0.0f;
-        const float objectScale      = 0.4f;
+        const float objectScale      = 0.45f;
 
         if( ! printed)
         {
@@ -222,7 +222,7 @@ static void renderLoop(sf::Window & App)
         glPopMatrix();
 
         // Finally, display rendered frame on screen
-        App.Display();
+        app.display();
     }
 }
 
